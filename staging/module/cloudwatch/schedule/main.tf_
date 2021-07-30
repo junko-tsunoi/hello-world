@@ -1,0 +1,22 @@
+# template_file.event_pattern
+data "template_file" "event_pattern" {
+  template = "${file("${path.module}/templates/ecr_imagescan_event_pattern.json")}"
+}
+
+# aws_cloudwatch_event_rule.ecr_imagescan:
+resource "aws_cloudwatch_event_rule" "event_rule" {
+  event_pattern = data.template_file.event_pattern.rendered
+  is_enabled    = true
+  name          = var.rule_name
+  tags          = var.tags
+}
+
+# aws_cloudwatch_event_target.ecr_imagescan:
+resource "aws_cloudwatch_event_target" "notification_result_imagescan" {
+  rule      = aws_cloudwatch_event_rule.event_rule.name
+  arn       = var.lambda_arn
+}
+
+output "event_rule_arn" {
+  value = aws_cloudwatch_event_rule.event_rule.arn
+}

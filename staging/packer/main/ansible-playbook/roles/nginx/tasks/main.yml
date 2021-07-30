@@ -1,0 +1,62 @@
+---
+- name: Copy repository file
+  copy:
+    src: nginx.repo
+    dest: /etc/yum.repos.d/nginx.repo
+    owner: root
+    mode: 0644
+    backup: yes
+
+- name: Install Nginx
+  yum:
+    name: nginx
+    state: present
+  notify: Restart Nginx
+
+- name: Copy conf file
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    mode: 0644
+    backup: yes
+  notify: Restart Nginx
+
+- name: Copy conf.d directory
+  template:
+    src: conf.d/default.j2
+    dest: /etc/nginx/conf.d/default.conf
+    owner: root
+    mode: 0644
+    backup: yes
+  notify: Restart Nginx
+
+- name: Copy logrotate file
+  template:
+    src: nginx.j2
+    dest: /etc/logrotate.d/nginx
+    owner: root
+    mode: 0644
+    backup: yes
+
+- name: Enable service nginx
+  systemd:
+    name: nginx
+    state: started
+    daemon_reload: yes
+    enabled: yes
+
+- name: Enable service nginx
+  systemd:
+    name: nginx
+    state: started
+    daemon_reload: yes
+    enabled: yes
+
+- name: フォルダ(/tmp/sample)を作成する
+  file:
+    path: /var/www/{{ project }}
+    state: directory
+    owner: nginx
+    group: www
+    recurse: true

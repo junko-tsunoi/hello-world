@@ -1,0 +1,32 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "SendStreamToBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObjectAcl",
+                "s3:PutObject",
+                "s3:ListBucketMultipartUploads",
+                "s3:ListBucket",
+                "s3:GetObject",
+                "s3:GetBucketLocation",
+                "s3:AbortMultipartUpload"
+            ],
+            "Resource": [
+                "${s3_bucket_arn}/waf_global/*",
+                "${s3_bucket_arn}"
+            ]
+        },
+        {
+            "Sid": "UseTheStream",
+            "Effect": "Allow",
+            "Action": [
+                "kinesis:GetShardIterator",
+                "kinesis:GetRecords",
+                "kinesis:DescribeStream"
+            ],
+            "Resource": "arn:aws:firehose:ap-northeast-1:896296778457:deliverystream/aws-waf-logs-toto-main-prod"
+        }
+    ]
+}

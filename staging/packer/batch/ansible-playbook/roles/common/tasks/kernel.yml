@@ -1,0 +1,10 @@
+---
+- name: Kernel Setting
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: "{{ item.state | default('present') }}"
+    ignoreerrors: yes
+  with_items:
+    - "{{ kernel_setting }}"
+

@@ -1,0 +1,47 @@
+---
+- name: Install repository
+  yum:
+    name: "{{ item.name }}"
+    state: present
+  with_items:
+    - "{{ repository }}"
+
+- name: Clean yum cache
+  command: "yum clean all"
+
+- name: Install php
+  yum:
+    name: "{{ item.name }}"
+    state: present
+    enablerepo: remi,epel
+  with_items:
+    - "{{ php_packages }}"
+
+- name: Set extensions
+  copy:
+    src: amazon-elasticache-cluster-client.so
+    dest: /opt/remi/php74/root/usr/lib64/php/modules/
+    mode: 0755
+
+- name: Set php config
+  copy:
+    src: php.ini
+    dest: /etc/opt/remi/{{ php_version }}/php.ini
+    mode: 0644
+    backup: yes
+
+- name: Create a symbolic link
+  file:
+    src: /usr/bin/{{ php_version}}
+    dest: /usr/bin/php
+    state: link
+
+- name: Set permission & owner
+  file:
+    path: /var/www
+    state: directory
+    owner: batch
+    group: batch
+    mode: 02775
+    recurse: yes
+

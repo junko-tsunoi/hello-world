@@ -1,0 +1,46 @@
+---
+- name: Add group of users
+  group:
+    name: "{{ item.name }}"
+    state: present
+  with_items: "{{ user_groups }}"
+
+- name: Add user
+  user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups }}"
+    password: "{{ item.password }}"
+    shell: /bin/bash
+  with_items: "{{ users }}"
+
+- name: Chmod home directory
+  file:
+    path: "/home/{{ item.name }}"
+    state: directory
+    mode: 0755
+  with_items: "{{ users }}"
+
+- name: Create .ssh directory
+  file:
+    path: /home/{{ item.name }}/.ssh
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: 0700
+  with_items: "{{ users }}"
+
+- name: Set authorized_keys
+  copy:
+    src: authorized_keys/{{ item.name }}
+    dest: /home/{{ item.name }}/.ssh/authorized_keys
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: 0600
+  with_items: "{{ users }}"
+
+- name: Set sudores
+  copy:
+    src: sudoers.d/{{ item.name }}
+    dest: /etc/sudoers.d/{{ item.name }}
+    mode: 0644
+  with_items: "{{ users }}"

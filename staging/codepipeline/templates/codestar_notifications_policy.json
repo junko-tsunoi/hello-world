@@ -1,0 +1,14 @@
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "1",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "codestar-notifications.amazonaws.com"
+      },
+      "Action": "sns:Publish",
+      "Resource": "${resource}"
+    }
+  ]
+}

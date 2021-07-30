@@ -1,0 +1,17 @@
+---
+- name: Install MySQL repository
+  yum:
+    name:
+      - http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm
+
+- name: Remove mariadb-libs
+  yum:
+    name: mariadb-libs
+    state: absent
+
+- name: Install mysql-community-client
+  yum:
+    name: "{{ item.name }}"
+    state: present
+  with_items:
+    - "{{ mysql_packages }}"

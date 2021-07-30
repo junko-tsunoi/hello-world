@@ -1,0 +1,3 @@
+---
+- name: Change execute cron of logrotate
+  command: mv /etc/cron.daily/logrotate /etc/cron.hourly/

@@ -1,0 +1,55 @@
+---
+yum_packages:
+  name:
+    - libselinux-python
+    - wget
+    - git
+    - bind-utils
+    - openssl-devel
+    - readline-devel
+    - zlib-devel
+    - gcc-c++
+    - tree
+    - gcc
+    - bzip2
+    - sysstat
+    - perf
+    - ncurses-compat-libs
+    - autoconf
+    - automake
+    - telnet
+    - ruby
+    - aws-cli
+    - libevent-devel
+    - libmemcached
+
+npm_packages:
+  - { name: yarn}
+
+# Server Hostname + Timzone + Locale
+timezone: Asia/Tokyo
+clock:
+  - { regexp: ZONE=, line: "ZONE=\"{{ timezone }}\"" }
+
+# Swap
+swap_file_path: /swapfile
+swap_file_size_kb: 1024
+swappiness: 10
+
+kernel_setting:
+  - { name: vm.swappiness, value: 10 }
+  - { name: net.ipv4.tcp_tw_reuse, value: 1 }
+  - { name: net.ipv4.tcp_fin_timeout, value: 10 }
+  - { name: net.ipv4.tcp_keepalive_time, value: 10 }
+  - { name: net.ipv4.tcp_keepalive_intvl, value: 3 }
+  - { name: net.ipv4.tcp_keepalive_probes, value: 2 }
+  - { name: net.ipv4.tcp_max_syn_backlog, value: 20480 }
+  - { name: net.core.netdev_max_backlog, value: 20480 }
+  - { name: net.core.somaxconn, value: 20480 }
+
+ulimits:
+  - { limit_name: nproc, value: 8192, domain: "*", limit_type: soft }
+  - { limit_name: nproc, value: 8192, domain: "*", limit_type: hard }
+  - { limit_name: nofile, value: 65536, domain: "*", limit_type: soft }
+  - { limit_name: nofile, value: 65536, domain: "*", limit_type: hard }
+

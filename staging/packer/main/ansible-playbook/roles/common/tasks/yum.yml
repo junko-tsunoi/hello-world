@@ -1,0 +1,10 @@
+---
+- name: Clean yum cache
+  command: "yum clean all"
+  
+- name: Install yum packages
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+  with_items:
+    - "{{ yum_packages }}"

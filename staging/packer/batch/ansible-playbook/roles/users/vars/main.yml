@@ -1,0 +1,10 @@
+---
+user_groups:
+  - { name: 'batch' }
+  - { name: 'hekk' }
+  - { name: 'spookies' }
+
+users:
+  - { name: 'batch', groups: 'batch', password: '$6$LO0zTFRJUtKrIbR0$mjGqhQCXN/.zty2HQDBcmkgo/eiR9RIOXjSgmC8MERQk8ffkhTu2kMf6vcVLP5Uv4ELvFQ4LfFaLBvWSFWDje.' }
+  - { name: 'hekk', groups: 'hekk,batch', password: '$6$LO0zTFRJUtKrIbR0$mjGqhQCXN/.zty2HQDBcmkgo/eiR9RIOXjSgmC8MERQk8ffkhTu2kMf6vcVLP5Uv4ELvFQ4LfFaLBvWSFWDje.' }
+  - { name: 'spookies', groups: 'spookies,batch', password: '$6$LO0zTFRJUtKrIbR0$mjGqhQCXN/.zty2HQDBcmkgo/eiR9RIOXjSgmC8MERQk8ffkhTu2kMf6vcVLP5Uv4ELvFQ4LfFaLBvWSFWDje.' }

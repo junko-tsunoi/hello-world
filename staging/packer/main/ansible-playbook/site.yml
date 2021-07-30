@@ -1,0 +1,13 @@
+# Install python and aptitude on the target machines (apt-get install python aptitude)
+# Copy ssh public key to machines (ssh-copy-id user@host)
+---
+- name: Create Bation Instance
+  hosts: bastion
+  become: true
+  become_method: sudo
+  roles:
+    - { role: common, tags: [ common ] }
+    - { role: users, tags: [ users ] }
+    - { role: nginx, tags: [ nginx ] }
+    - { role: php, tags: [ php ] }
+    - { role: mysql, tags: [ mysql ] }

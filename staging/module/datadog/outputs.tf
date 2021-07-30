@@ -1,0 +1,1 @@
+## module/datadog/outputs.tf

@@ -1,0 +1,6 @@
+---
+- include_tasks: locale.yml
+- include_tasks: swap.yml
+- include_tasks: ulimit.yml
+- include_tasks: kernel.yml
+- include_tasks: yum.yml

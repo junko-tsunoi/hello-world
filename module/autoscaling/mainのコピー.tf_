@@ -1,0 +1,91 @@
+resource "aws_autoscaling_group" "default" {
+  name                = var.asg_name
+  vpc_zone_identifier = var.vpc_zone_identifier
+  launch_template {
+    id      = aws_launch_template.default.id
+    version = "$Latest"
+  }
+
+  desired_capacity          = var.desired_capacity
+  min_size                  = var.min_size
+  max_size                  = var.max_size
+  target_group_arns         = var.target_group_arns
+  wait_for_capacity_timeout = 0
+  enabled_metrics = [
+    "GroupMinSize",
+    "GroupMaxSize",
+    "GroupDesiredCapacity",
+    "GroupInServiceInstances",
+    "GroupPendingInstances",
+    "GroupStandbyInstances",
+    "GroupTerminatingInstances",
+    "GroupTotalInstances"
+  ]
+  tags = [
+    {
+      key                 = "Name"
+      value               = var.asg_name
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Env"
+      value               = var.env
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Owner"
+      value               = var.owner
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Type"
+      value               = var.instance_type
+      propagate_at_launch = true
+    }
+  ]
+}
+
+resource "aws_launch_template" "default" {
+  name          = var.launch_template_name
+  image_id      = data.aws_ami.default.id
+  instance_type = var.instance_type
+  ebs_optimized = var.ebs_optimized
+  vpc_security_group_ids = var.vpc_security_group_ids
+  user_data     = var.user_data
+
+  iam_instance_profile {
+    name = var.iam_instance_profile
+  }
+
+  tag_specifications {
+    resource_type = "volume"
+
+    tags = {
+      Name   = var.launch_template_name
+      Env    = var.env
+      Owner  = var.owner
+      Backup = var.ebs_backup
+    }
+  }
+}
+
+data "aws_ami" "default" {
+  owners = ["self"]
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+  filter {
+    name   = "tag:Name"
+    values = [var.ami_name]
+  }
+  filter {
+    name   = "tag:Env"
+    values = [var.env]
+  }
+  filter {
+    name   = "tag:Created"
+    values = ["packer"]
+  }
+  most_recent = true
+}

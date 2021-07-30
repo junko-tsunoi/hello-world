@@ -1,0 +1,28 @@
+data "template_file" "asume_role_policy-ec2" {
+  template = file("${path.module}/template/asume_role_policy-ec2.json")
+
+  vars = {
+    principal-service = "ec2.amazonaws.com"
+  }
+}
+
+resource "aws_iam_role" "EC2Role" {
+  name               = var.ec2_role_name
+  assume_role_policy = data.template_file.asume_role_policy-ec2.rendered
+
+  tags = {
+    Owner = var.owner
+    Env   = var.env
+  }
+}
+
+resource "aws_iam_instance_profile" "EC2Role" {
+  name = aws_iam_role.EC2Role.name
+  role = aws_iam_role.EC2Role.name
+}
+
+resource "aws_iam_role_policy_attachment" "ECS2Role" {
+  count      = length(var.policy_arn)
+  role       = aws_iam_role.EC2Role.name
+  policy_arn = element(var.policy_arn, count.index)
+}

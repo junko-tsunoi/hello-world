@@ -1,0 +1,26 @@
+---
+php_version: php74
+
+php_packages:
+  name:
+    - php74
+    - php74-php
+    - php74-php-pecl-apcu
+    - php74-php-mbstring
+    - php74-php-opcache
+    - php74-php-devel
+    - php74-php-simplexml
+    - php74-php-fpm
+    - php74-php-gd
+    - php74-php-cli
+    - php74-php-xml
+    - php74-php-common
+    - php74-php-mysqlnd
+
+repository:
+  name:
+    - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    - https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+# Log rotate
+log_rotate: 14

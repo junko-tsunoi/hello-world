@@ -1,0 +1,11 @@
+/var/opt/remi/php80/log/php-fpm/*log {
+    missingok
+    notifempty
+    daily
+    rotate {{ log_rotate }}
+    sharedscripts
+    delaycompress
+    postrotate
+      /bin/kill -SIGUSR1 `cat /var/opt/remi/php80/run/php-fpm/php-fpm.pid 2>/dev/null` 2>/dev/null || true
+    endscript
+}
